@@ -2,27 +2,32 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.7.6</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
+    
     <groupId>tn.esprit</groupId>
     <artifactId>eventsProject</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <name>eventsProject</name>
     <description>eventsProject</description>
+    
     <scm>
         <connection>scm:svn:http://somerepository.com/svn_repo/trunk</connection>
         <developerConnection>scm:svn:https://somerepository.com/svn_repo/trunk</developerConnection>
         <url>http://somerepository.com/view.cgi</url>
     </scm>
+    
     <properties>
         <java.version>1.8</java.version>
     </properties>
+    
     <dependencies>
-
+        <!-- Spring Boot Dependencies -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -31,32 +36,51 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>
+        
+        <!-- MySQL Driver -->
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
             <scope>runtime</scope>
         </dependency>
+        
+        <!-- Lombok Dependency -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
+        
+        <!-- Spring Boot Test Dependency -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        
+        <!-- SonarQube Plugin (for static code analysis) -->
+        <dependency>
+            <groupId>org.sonarsource.scanner.maven</groupId>
+            <artifactId>sonar-maven-plugin</artifactId>
+            <version>4.0.0.4121</version>
+        </dependency>
+        
+        <!-- Spring Boot Actuator (for Prometheus integration) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
     </dependencies>
-
+    
     <build>
         <plugins>
+            <!-- Spring Boot Maven Plugin -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -69,6 +93,8 @@
                     </excludes>
                 </configuration>
             </plugin>
+            
+            <!-- Maven Release Plugin (for versioning and deployment) -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
@@ -77,7 +103,56 @@
                     <tagNameFormat>v@{project.version}</tagNameFormat>
                 </configuration>
             </plugin>
+            
+            <!-- SonarQube Maven Plugin -->
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>4.0.0.4121</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>sonar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            
+            <!-- Docker Maven Plugin (to build Docker image) -->
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>1.2.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>build</goal>
+                            <goal>push</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            
+            <!-- Maven Docker Compose Plugin -->
+            <plugin>
+                <groupId>com.github.docker-java</groupId>
+                <artifactId>docker-java-core</artifactId>
+                <version>3.1.5</version>
+            </plugin>
         </plugins>
     </build>
-
+    
+    <distributionManagement>
+        <repository>
+            <id>nexus-repository</id>
+            <name>Release Repository</name>
+            <url>http://192.168.33.10:8081/#admin/repository/repositories:maven-releases</url>
+        </repository>
+        <snapshotRepository>
+            <id>nexus-snapshot-repository</id>
+            <name>Snapshot Repository</name>
+            <url>http://192.168.33.10:8081/#admin/repository/repositories:maven-snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
+    
 </project>
