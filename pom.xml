@@ -24,6 +24,7 @@
     
     <properties>
         <java.version>1.8</java.version>
+         <sonar.login>sqa_8809031db5462abecc53a9950b06a0636bd24bd1</sonar.login>
     </properties>
     
     <dependencies>
